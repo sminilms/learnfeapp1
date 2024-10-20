@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Frontend App</title>
+    <link
+      rel="icon"
+      href="./assets/static/infinite-outline.svg"
+      type="image/x-icon"
+    />
+  </head>
+  <body>
+    <div>Hello World 123</div>
+    <ul>
+      <% for (var i = 0; i < directory.length; i++) { %>
+      <li>
+        <a href="<%= path %>/<%= directory[i].name %>"
+          ><%= directory[i].name %></a
+        >
+      </li>
+      <% } %>
+    </ul>
+  </body>
+</html>

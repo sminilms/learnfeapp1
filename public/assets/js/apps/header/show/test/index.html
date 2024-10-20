@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Mock</title>
+    <style>
+      body {
+        /* Make some space at the top; there is no top navigation bar
+         on this page */
+        padding-top: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="widget"></div>
+    <script src="../../../../vendor/require.js"></script>
+
+    <script>
+      require.config({
+        baseUrl: "../../../../../../assets/js",
+        paths: {
+          lfe: "./",
+          backbone: "vendor/backbone",
+          jquery: "vendor/jquery",
+          json2: "vendor/json2",
+          marionette: "vendor/backbone.marionette",
+          mock: "vendor/jquery.mockjax",
+          i18n: "vendor/i18n",
+          text: "vendor/text",
+          tpl: "vendor/underscore-tpl",
+          underscore: "vendor/underscore",
+          "ui-ext": "utils/load-extensions/load-extensions"
+        },
+        shim: {
+          underscore: {
+            exports: "_"
+          },
+          backbone: {
+            deps: ["jquery", "underscore", "json2"],
+            exports: "Backbone"
+          },
+          marionette: {
+            deps: ["backbone"],
+            exports: "Marionette"
+          },
+          tpl: ["text"]
+        },
+        config: {
+          "lfe/utils/contexts/factories/connector": {
+            connection: {
+              url: "//localhost:8080/otcs/cs/api/v1",
+              session: {
+                ticket:
+                  "lwwcvHZOgQdgw6A37q2i1LqrySJ19UCHaSFOyWvwKlUPCx/7EG79pkaQqQWFR7YnDhkG1y9UXbhiQ6SZW1UAeuVe9ftXEQT0aKteuK9DzvRpW66Ght9Psg=="
+              }
+            }
+          },
+          i18n: {
+            locale: "en-us"
+          }
+        }
+      });
+
+      require([
+        "lfe/vendor/backbone.marionette",
+        "utils/contexts/page/page.context",
+        "apps/header/show/show.view",
+        "./view.mock.js"
+      ], function (Marionette, PageContext, ShowView, mock) {
+        "use strict";
+
+        _.templateSettings = {
+          interpolate: /\{\{=(.+?)\}\}/g,
+          escape: /\{\{-(.+?)\}\}/g,
+          evaluate: /\{\{(.+?)\}\}/g
+        };
+
+        // Wrap the widget placeholder
+        var region = new Marionette.Region({
+            el: "#widget"
+          }),
+          // Create the data managing context
+          context = new PageContext(),
+          // Create the widget instance
+          view = new ShowView({
+            context: context
+          });
+        console.log("PageContext", context);
+        // Show the widget on the page
+        region.show(view);
+        // Mock the REST API responses
+        mock.enable();
+        // Load data from the server
+        context.fetch();
+      });
+    </script>
+  </body>
+</html>
